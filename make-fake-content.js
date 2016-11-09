@@ -65,14 +65,17 @@ function generateBigTree (maxLevels = 6, targetCount = 17500) {
 
     let tree = {
         children: [],
-        label: "Home"
+        label: "Home",
+        _id: "home" 
     }
 
-    while (childCount < 80000) {
+    while (childCount < 180000) {
         const newChild = createChild()
         tree.children.push(newChild)
         childCount++;
     }
+
+    console.log(`made a ${childCount} node tree`)
 
     return tree
 

@@ -2,4 +2,98 @@
     font-family: inherit;
     font-family: monospace;
     line-height: 1.6em;
+
+    background: navy;
+    padding: 0;
+    
+    color: white;
+    max-width: 350px;
+
+    .node {
+
+        margin: 0;
+
+        max-width: 350px;
+
+        text-overflow: ellipsis;
+
+        display: block;
+        overflow: hidden;
+        height: 0;
+
+        background: darken(navy, 5%);
+
+        &.top-level {
+            background: navy;
+        }
+
+        /*transition: height 0.2s ease-in-out;*/
+
+        line-height: 3em;
+
+        &:hover {
+            background: blue;
+            color: white;
+        }
+
+        animation: scoot-down;
+        animation-duration: 0.2s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+
+        &:before {
+            content: "\00BB";
+            display: inline-block;
+            color: transparent;
+            margin-right: 0.5em;
+            transition: transform 0.2s ease-in;
+        }
+
+    }
+
+    .expandable {
+        &:before {
+            content: "\00BB";
+            display: inline-block;
+            color: inherit;
+            margin-right: 0.5em;
+            transition: transform 0.2s ease-in;
+        }
+
+        &.expanded {
+
+            &.top-level {
+                box-shadow: 0 1px 0 0 black;
+            }
+
+
+            &:before {
+                transform: rotate(90deg);
+            }
+        }
+    }
+
+    .example-enter {
+        opacity: 0.01;
+    }
+
+    .example-enter.example-enter-active {
+        opacity: 1;
+        transition: opacity 500ms ease-in;
+    }
+
+    .example-leave {
+        opacity: 1;
+    }
+
+    .example-leave.example-leave-active {
+        opacity: 0.01;
+        transition: opacity 300ms ease-in;
+    }
+}
+
+
+@keyframes scoot-down {
+    0%   { height: 0;   }
+    100% { height: 3em; }
 }

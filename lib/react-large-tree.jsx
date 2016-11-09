@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import './react-large-tree.scss';
 
 
@@ -12,10 +13,6 @@ export default React.createClass({
   },
 
   toggleExpanded: function (uniqueValue) {
-
-    console.log(uniqueValue)
-
-    console.log(this.state)
 
     const index = this.state.expandedItems.indexOf(uniqueValue)
 
@@ -36,33 +33,18 @@ export default React.createClass({
 
     const toggleExpanded = this.toggleExpanded
 
-    console.log("expanded items", expandedItems)
+    let flatTree = []
 
-    let flatTreeElements = []
-
-    function getElementForChild  (node, level = 0) {
-
-      // if (level != 0) console.log(level, node)
-
-      const styleObj = {
-        paddingLeft: level * 10,
-        textDecoration: node.children ? "underline" : "none",
-        cursor: node.children ? "pointer" : "default"
-      }
-
-      return <li
-        style   = {styleObj} 
-        key     = {node[uniqueKey]}
-        onClick = {node.children ? () => { console.log(node); toggleExpanded(node[uniqueKey]) } : null} 
-      >
-        {node.label}
-      </li>
-    }
+    
 
     function pushChildToFlatTree (child, level = 0) {
 
-      const childElement = getElementForChild(child, level)
-      flatTreeElements.push(childElement)
+      
+      // const childElement = getElementForChild(child, level)
+
+      const node = Object.assign(child, {__level: level})
+
+      flatTree.push(node)
 
       const expanded = (child.children && expandedItems.indexOf(child[uniqueKey]) != -1 ) 
 
@@ -90,7 +72,43 @@ export default React.createClass({
 
     pushChildToFlatTree(content)
 
-    return flatTreeElements  
+    return flatTree  
+
+  },
+
+  getElementForChild: function (node) {
+
+    const uniqueKey = this.props.uniqueKey
+
+    const level = node.__level
+    // if (level != 0) console.log(level, node)
+
+    const styleObj = {
+      paddingLeft: level * 10,
+      // textDecoration: node.children ? "underline" : "none",
+      cursor: node.children ? "pointer" : "default"
+    }
+
+    let className = "node"
+
+    if (node.children && level != 0) {
+      className += " expandable"
+    }
+
+    if (this.state.expandedItems.includes(node[uniqueKey])) {
+      className += " expanded"
+    }
+
+    if (level <= 1) { className += " top-level" }
+
+    return <li
+      style     = {styleObj} 
+      key       = {node[uniqueKey]}
+      onClick   = {node.children ? () => { this.toggleExpanded(node[uniqueKey]) } : null}
+      className = {className} 
+    >
+      {node.label}
+    </li>
 
   },
 
@@ -100,15 +118,20 @@ export default React.createClass({
 
     if (!contentTree) {
       console.warn("react large tree expected a 'content' prop")
-      return null
+      return ""
     }
 
     let flatContent = this.getFlatTree(contentTree, this.state.expandedItems, "_id")
 
-    console.log(flatContent)
-
     return  <ol className="react-large-tree">
-              {flatContent}
+              
+                {flatContent.map(child => this.getElementForChild(child))}
+              
             </ol>;
+
+    
+
+
+
   }
 });

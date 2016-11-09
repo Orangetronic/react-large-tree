@@ -3,12 +3,28 @@
   <title>react large tree Demo</title>
 </head>
 <body>
+  "yo"
   <div id="main"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.js"></script>
   <script src="react-large-tree.js"></script>
+
+  <!-- Provide your own content here if you want! -->
+  <script src="make-fake-content.js"></script>
   <script>
     /* jshint undef:false */
-    React.render(React.createElement(ReactLargeTree), document.getElementById('main'));
+    
+    // or here! 
+    
+    // content should be an object, with a children Array
+    let content = generateBigTree()
+    
+    let props   = {
+      content,
+      uniqueKey: "_id"
+    }
+
+    React.render(React.createElement(ReactLargeTree, props), document.getElementById('main'));
   </script>
 </body>
 </html>
+

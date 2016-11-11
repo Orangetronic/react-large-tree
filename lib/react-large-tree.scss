@@ -9,25 +9,77 @@
     color: white;
     max-width: 350px;
 
+    overflow: hidden;
+
+    transition: all 0.2s;
+
     .node {
 
         margin: 0;
 
-        max-width: 350px;
+        overflow: hidden;
 
+        white-space: nowrap;
         text-overflow: ellipsis;
 
         display: block;
-        overflow: hidden;
-        height: 0;
+        // height: 0px;
+        height: 3em;
 
-        background: darken(navy, 5%);
+        background: darken(navy, 10%);
 
         &.top-level {
             background: navy;
+            
+
         }
 
+        &.sub-level {
+
+            transform: translate3d(-1350px, 0, 0);
+
+            animation: scoot-in;
+
+            animation-duration: 0.2s;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+
+
+        }
+
+        &.will-leave {
+            background: orange;
+            // // background: pink;
+            // animation-iteration-count: 1;
+
+            transform: translate3d(0, 0, 0);
+            animation: scoot-out;
+
+            animation-duration: 0.2s;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+
+            // animation-iteration-count: 2;
+            // animation-fill-mode: forwards;
+            // animation-fill-mode: backwards;
+        }
         /*transition: height 0.2s ease-in-out;*/
+
+        &.target {
+            transition: box-shadow 0.2s ease-out;
+        }
+
+        &.drop-into {
+            box-shadow: inset 0 0 5px white;
+        }
+    
+        &.drop-before {
+            box-shadow: inset 0 2px 0 white;
+        }
+
+        &.drop-after {
+            box-shadow: inset 0 -2px 0 white;
+        }
 
         line-height: 3em;
 
@@ -35,11 +87,6 @@
             background: blue;
             color: white;
         }
-
-        animation: scoot-down;
-        animation-duration: 0.2s;
-        animation-iteration-count: 1;
-        animation-fill-mode: forwards;
 
         &:before {
             content: "\00BB";
@@ -63,7 +110,7 @@
         &.expanded {
 
             &.top-level {
-                box-shadow: 0 1px 0 0 black;
+                box-shadow: inset 0 -1px 0 white;
             }
 
 
@@ -93,7 +140,13 @@
 }
 
 
-@keyframes scoot-down {
-    0%   { height: 0;   }
-    100% { height: 3em; }
+@keyframes scoot-in {
+    0%   { transform: translate3d(-1350px, 0, 0); }
+    100% { transform: translate3d(0,0,0); }
 }
+
+@keyframes scoot-out {
+    0%   { transform: translate3d(0,0,0); }
+    100% { transform: translate3d(-1350px, 0, 0); }
+}
+

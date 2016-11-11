@@ -5,12 +5,14 @@
 <body>
   "yo"
   <div id="main"></div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
   <script src="react-large-tree.js"></script>
 
   <!-- Provide your own content here if you want! -->
   <script src="make-fake-content.js"></script>
   <script>
+    
     /* jshint undef:false */
     
     // or here! 
@@ -23,7 +25,7 @@
       uniqueKey: "_id"
     }
 
-    React.render(React.createElement(ReactLargeTree, props), document.getElementById('main'));
+    ReactDOM.render(React.createElement(ReactLargeTree, props), document.getElementById('main'));
   </script>
 </body>
 </html>

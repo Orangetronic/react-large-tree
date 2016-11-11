@@ -28,6 +28,14 @@ module.exports = {
           'includePaths[]=' + (path.resolve(__dirname, './node_modules'))
       },
       {
+        test: /\.css$/,
+        loaders: [
+          'style-loader',
+          'css-loader?importLoaders=1',
+          'postcss-loader'
+        ]
+      },
+      {
         test: /(\.js)|(\.jsx)$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
@@ -37,5 +45,6 @@ module.exports = {
         }
       }
     ]
+
   }
 };

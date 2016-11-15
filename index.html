@@ -24,7 +24,9 @@
     let props   = {
       content,
       uniqueKey: "_id",
-      contextMenu: true
+      canDragChildInto: () => true,
+      handleContextMenu: (nodeId)  => console.log(nodeId),
+      // childMoved: (moveDefinition) => console.log(moveDefinition) 
     }
 
     ReactDOM.render(React.createElement(ReactLargeTree, props), document.getElementById('main'));

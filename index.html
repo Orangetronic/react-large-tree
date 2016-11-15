@@ -7,6 +7,7 @@
   <div id="main"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+  
   <script src="react-large-tree.js"></script>
 
   <!-- Provide your own content here if you want! -->
@@ -18,11 +19,12 @@
     // or here! 
     
     // content should be an object, with a children Array
-    let content = generateBigTree()
+    let content = generateBigTree(8, 14000)
     
     let props   = {
       content,
-      uniqueKey: "_id"
+      uniqueKey: "_id",
+      contextMenu: true
     }
 
     ReactDOM.render(React.createElement(ReactLargeTree, props), document.getElementById('main'));

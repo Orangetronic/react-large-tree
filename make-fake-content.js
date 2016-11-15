@@ -37,7 +37,11 @@ function generateBigTree (maxLevels = 6, targetCount = 17500) {
             label: makePhrase(),
             _id  : uuid()
         }
-        
+
+        if (Math.random() > 0.6) {
+            newChild.href = `#${newChild.label}`
+        }
+
         // maybeAddChildren…
         const childIndex = Math.random()
 
@@ -71,7 +75,7 @@ function generateBigTree (maxLevels = 6, targetCount = 17500) {
         _id: "home" 
     }
 
-    while (childCount < 180000) {
+    while (childCount < targetCount) {
         const newChild = createChild()
         tree.children.push(newChild)
         childCount++;

@@ -142,13 +142,13 @@ class ReactLargeTree extends React.Component {
 
     }
 
-    this.state.expandedItems = expandedItems
     if (expandedSearchItems !== null) {
       console.log('resetting expanded search items')
       this.expandedForSearch = expandedSearchItems
     }
 
-    this.updateFlatTree(true)
+    this.setState({expandedItems : expandedItems})
+    // this.updateFlatTree(true)
 
     this.forceUpdate()
 
@@ -240,12 +240,15 @@ class ReactLargeTree extends React.Component {
 
   }
 
+  // update the internal tree
   // ——————————————————————————————•——————————————————————————————
   updateFlatTree (ignoreFilters = false) {
     const tree = ignoreFilters ? this.tree : this.recursiveFilter(this.tree, this.searchTerm, this.searchKey)
     this.flatTree = this.getFlatTree(tree, this.state.expandedItems, this.props.uniqueKey)
   }
 
+  // simulate a drag & drop move operation
+  // (latency compensation for external actions, or work-in-progress for a save action)
   // ——————————————————————————————•——————————————————————————————
   pruneAndReattach (childNode, newParentId, position = 'into', target) {
 
@@ -422,6 +425,10 @@ class ReactLargeTree extends React.Component {
 
   }
 
+
+  // ——————————————————————————————•——————————————————————————————
+  //  from current drag state, infer drop output
+  // ——————————————————————————————•——————————————————————————————
   getChildParentTargetNodes () {
 
       const dropTargetNode = this.flatTree.filter(node => node[this.props.uniqueKey] === this.currentDropTargetIdentifier)[0]
@@ -506,8 +513,6 @@ class ReactLargeTree extends React.Component {
       if (!e.target && e.target.nodeName !== 'LI') {
         return
       }
-
-
 
       const target       = e.target
       const targetUnique = target.dataset.unique

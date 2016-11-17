@@ -34,7 +34,6 @@ class ReactLargeTree extends React.Component {
 
     this.searchKey = props.searchKey || 'label'
 
-
     this.canDragChildInto = props.canDragChildInto ? props.canDragChildInto : () => true
 
     this.setCanDragChildInto(props)
@@ -55,7 +54,7 @@ class ReactLargeTree extends React.Component {
     this.setCanDragChildInto(nextProps)
   }
 
-  recursiveFilter (obj, searchTerm, searchKey) {
+  recursiveFilter (obj, searchTerm, searchKey, expandedForSearchOverride) {
 
     const uniqueKey = this.props.uniqueKey
 
@@ -99,7 +98,7 @@ class ReactLargeTree extends React.Component {
 
     const newobj = filterChildren(obj)
 
-    this.expandedForSearch = expandedForSearch
+    this.expandedForSearch = expandedForSearchOverride ? expandedForSearchOverride : expandedForSearch
 
     return newobj
   }
@@ -147,8 +146,9 @@ class ReactLargeTree extends React.Component {
       this.expandedForSearch = expandedSearchItems
     }
 
-    this.setState({expandedItems : expandedItems})
-    // this.updateFlatTree(true)
+    this.state.expandedItems = expandedItems
+
+    this.updateFlatTree(true)
 
     this.forceUpdate()
 
@@ -243,7 +243,9 @@ class ReactLargeTree extends React.Component {
   // update the internal tree
   // ——————————————————————————————•——————————————————————————————
   updateFlatTree (ignoreFilters = false) {
-    const tree = ignoreFilters ? this.tree : this.recursiveFilter(this.tree, this.searchTerm, this.searchKey)
+
+    const tree = ignoreFilters ? this.recursiveFilter(this.tree, this.searchTerm, this.searchKey, this.expandedForSearch) : this.recursiveFilter(this.tree, this.searchTerm, this.searchKey)
+    
     this.flatTree = this.getFlatTree(tree, this.state.expandedItems, this.props.uniqueKey)
   }
 
@@ -351,9 +353,7 @@ class ReactLargeTree extends React.Component {
       classList.push('expanded')
     }
 
-    if (level <= 1) {
-      classList.push('top-level')
-    } else {
+    if (level <= 1) { classList.push('top-level') } else {
       classList.push('sub-level')
     }
 

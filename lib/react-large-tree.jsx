@@ -20,10 +20,12 @@ class ReactLargeTree extends React.Component {
 
     this.expandedForSearch = []
 
+    this.dragAllowed = true
+
     this.state = {
-      expandedItems: [],
-      toBeHidden: [],
-      dragging: false
+      expandedItems : [],
+      toBeHidden    : [],
+      dragging      : false
     }
 
     // we store an internal flat tree, so we don't have to do any tree recursion change various state
@@ -40,10 +42,12 @@ class ReactLargeTree extends React.Component {
 
   }
 
+  // ——————————————————————————————•——————————————————————————————
   setCanDragChildInto (props) {
     this.canDragChildInto = props.canDragChildInto ? props.canDragChildInto : () => true
   }
 
+  // ——————————————————————————————•——————————————————————————————
   componentWillReceiveProps (nextProps) {
 
     if (nextProps.content) {
@@ -54,6 +58,7 @@ class ReactLargeTree extends React.Component {
     this.setCanDragChildInto(nextProps)
   }
 
+  // ——————————————————————————————•——————————————————————————————
   recursiveFilter (obj, searchTerm, searchKey, expandedForSearchOverride) {
 
     const uniqueKey = this.props.uniqueKey
@@ -154,6 +159,7 @@ class ReactLargeTree extends React.Component {
 
   }
 
+  // ——————————————————————————————•——————————————————————————————
   doSearch (searchTerm, immediately = false) {
 
     if (!immediately) {
@@ -245,8 +251,9 @@ class ReactLargeTree extends React.Component {
   updateFlatTree (ignoreFilters = false) {
 
     const tree = ignoreFilters ? this.recursiveFilter(this.tree, this.searchTerm, this.searchKey, this.expandedForSearch) : this.recursiveFilter(this.tree, this.searchTerm, this.searchKey)
-    
+
     this.flatTree = this.getFlatTree(tree, this.state.expandedItems, this.props.uniqueKey)
+
   }
 
   // simulate a drag & drop move operation
@@ -335,8 +342,7 @@ class ReactLargeTree extends React.Component {
     const level = node.__level
 
     const styleObj = {
-      paddingLeft : level * 20,
-      cursor      : node.children ? 'pointer' : 'default'
+      paddingLeft : level * 20
     }
 
     const classList = []
@@ -404,15 +410,23 @@ class ReactLargeTree extends React.Component {
 
     }
 
+    // id there is an iconClass, stick an icon at the beginning of the label
+    if (node.iconClass) {
+      label = [(<i className={node.iconClass} ></i>)].concat(label)
+    }
+
+    // if this is the root node, we can't drag it, otherwise, defer to whether or not the tree is locked
+    const locked = node.__level === 0 ? true : this.props.locked
+
     const listItem = (<li
-      draggable   = { true }
+      draggable   = { locked ? false : true }
       data-unique = { node[uniqueKey] }
       style       = { styleObj }
       key         = { node[uniqueKey] }
       className   = { classList.join(' ') }
     >
 
-      { node.children && level !== 0 ? expandButton : null }
+      { node.children && node.children.length && level !== 0 ? expandButton : null }
 
       { node.href ? <a href={node.href}>{label}</a> : label }
 
@@ -420,8 +434,21 @@ class ReactLargeTree extends React.Component {
 
     </li>)
 
-    return listItem
+    const renamer = this.props.editingChild === node[uniqueKey] ?
+      (<li
+        className = "node input-node"
+        key       = {node[uniqueKey]}
+       >
+        <input
+          type         = "text"
+          placeholder  = {'please enter a name'}
+          defaultValue = {node.label}
+          onBlur       = {(e) => this.props.handleRename(node[uniqueKey], e.target.value)}
+        />
+       </li>) :
+      null
 
+    return renamer || listItem
 
   }
 
@@ -438,7 +465,7 @@ class ReactLargeTree extends React.Component {
 
       let newParentId
 
-      if (this.currentDropLocation === 'into') {
+      if (this.currentDropLocation === 'into' || dropTargetNode.__level === 0) {
         newParentId = this.currentDropTargetIdentifier
       } else {
         newParentId = dropTargetNode.__parent
@@ -470,7 +497,8 @@ class ReactLargeTree extends React.Component {
 
       if (e.target.nodeName === 'BUTTON' && e.target.dataset.type === 'context-menu-trigger') {
         const contextNodeId = e.target.dataset.unique
-        this.props.handleContextMenu(contextNodeId)
+        const clientRect = e.target.getBoundingClientRect() 
+        this.props.handleContextMenu(contextNodeId, clientRect)
       }
 
       if (e.target.nodeName === 'BUTTON' && e.target.dataset.type === 'expander') {
@@ -545,9 +573,11 @@ class ReactLargeTree extends React.Component {
       //        consult a callback prop to decide!
       if (this.canDragChildInto(dragChildNode, newParentNode)) {
         e.dataTransfer.dropEffect = 'move'
+        this.dragAllowed = true
         e.preventDefault()
       } else {
         e.dataTransfer.dropEffect = 'none'
+        this.dragAllowed = false
       }
 
 
@@ -632,7 +662,7 @@ class ReactLargeTree extends React.Component {
         {this.state.showContextMenuForNode ? `context menu node id: ${this.state.showContextMenuForNode}` : `no current context menu node`}<br />
       <input onKeyUp={(e) => this.doSearch(e.target.value) } placeholder="Search 🔍"/>
       <ol
-        className   = {`react-large-tree dragging-${this.state.dragging}`}
+        className   = {`react-large-tree dragging-${this.state.dragging} drag-allowed-${this.dragAllowed}`}
         onDrop      = {drop}
         onDragOver  = {dragover}
         onDragStart = {dragstart}
@@ -640,7 +670,7 @@ class ReactLargeTree extends React.Component {
         onClick     = {handleClick}
       >
 
-        {elements.length ? elements : "nothing to see here"}
+        {elements.length ? elements : 'nothing to see here'}
 
       </ol>
       </div>

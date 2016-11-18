@@ -19,18 +19,21 @@
     // or here! 
     
     // content should be an object, with a children Array
-    let content = generateBigTree(8, 14000)
+    let content = generateBigTree(8, 9000)
 
     const canDragChildInto = (childNode, parentNode) => {
       console.log([childNode, parentNode])
-      return true
+      return false
     }
     
     let props   = {
       content,
       canDragChildInto,
+      locked: false,
+      editingChild: "",
       uniqueKey: "_id",
-      handleContextMenu: (nodeId)  => console.log(nodeId),
+      handleContextMenu: (nodeId, position)  => console.log(nodeId, position),
+      handleRename: (nodeId, newName) => console.log(nodeId, newName)
       // childMoved: (moveDefinition) => console.log(moveDefinition) 
     }
 

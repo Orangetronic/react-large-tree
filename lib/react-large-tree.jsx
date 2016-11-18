@@ -69,16 +69,12 @@ class ReactLargeTree extends React.Component {
 
     let expandedForSearch = []
 
-    console.log(searchKey, searchTerm)
-
     function filterChildren (node) {
       let newNode = Object.assign({}, node)
       let expanded = false;
       if (!newNode[searchKey]) {
-
-        console.log(`node doesn't have searchkey`, newNode, newNode[searchKey])
+        console.warn(`you're trying to search, but there's a node in your tree that's missing the ${searchKey} property`)
         return false
-
       }
 
       if (newNode.children) {
@@ -507,8 +503,9 @@ class ReactLargeTree extends React.Component {
 
       if (e.target.nodeName === 'BUTTON' && e.target.dataset.type === 'context-menu-trigger') {
         const contextNodeId = e.target.dataset.unique
-        const clientRect = e.target.getBoundingClientRect() 
-        this.props.handleContextMenu(contextNodeId, clientRect)
+        const contextNode   = this.flatTree.filter(node => node[this.props.uniqueKey] === contextNodeId)[0]
+        const clientRect    = e.target.getBoundingClientRect()
+        this.props.handleContextMenu(contextNode, clientRect)
       }
 
       if (e.target.nodeName === 'BUTTON' && e.target.dataset.type === 'expander') {

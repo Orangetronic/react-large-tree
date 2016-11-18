@@ -69,12 +69,13 @@ class ReactLargeTree extends React.Component {
 
     let expandedForSearch = []
 
-    console.log(searchKey)
+    console.log(searchKey, searchTerm)
 
     function filterChildren (node) {
       let newNode = Object.assign({}, node)
       let expanded = false;
       if (!newNode[searchKey]) {
+
         console.log(`node doesn't have searchkey`, newNode, newNode[searchKey])
         return false
 

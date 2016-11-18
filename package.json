@@ -1,7 +1,8 @@
 {
   "name": "react-large-tree",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "react large tree",
+  "main": "index.js",
   "scripts": {
     "test": "eslint lib/ spec/ && ./node_modules/karma/bin/karma start karma.conf.js",
     "watch-test": "./node_modules/karma/bin/karma start karma.conf.js --auto-watch --no-single-run",

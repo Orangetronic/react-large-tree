@@ -1,15 +1,24 @@
-$node-height: 5rem;
+$node-height   : 5rem;
+$background    : navy;
+$highlight     : yellow;
+$hover         : teal;
+$context-hover : white;
+$not-allowed   : red;
+$foreground    : white;
+$max-width     : 330px;
+
+
 
 .react-large-tree {
-    font-family: inherit;
-    font-family: monospace;
-    line-height: 1.6em;
+    /*font-family: inherit;*/
+    /*font-family: monospace;*/
 
-    background: navy;
+
+    color: $foreground;
+    background: $background;
+
     padding: 0;
-
-    color: white;
-    max-width: 550px;
+    max-width: $max-width;
 
     overflow: hidden;
 
@@ -24,15 +33,15 @@ $node-height: 5rem;
         display: block;
         height: $node-height;
         line-height: $node-height;
-        background: darken(navy, 10%);
+        background: darken($background, 10%);
 
         transform: translate3d(0,0,0);
 
         padding-right: 2em;
 
-        a { color: white; }
+        a { color: $foreground; }
 
-        &.top-level { background: navy; }
+        &.top-level { background: $background; }
 
         &.sub-level {
             transform: translate3d(-1350px, 0, 0);
@@ -57,7 +66,6 @@ $node-height: 5rem;
             line-height: $node-height;
             outline: none;
             border: none;
-            font-family: monospace;
             margin: 0;
             font-size: inherit;
             background: inherit;
@@ -66,7 +74,7 @@ $node-height: 5rem;
             
             &::selection {
                 color: black;
-                background: deeppink;
+                background: $highlight;
             }
         }
 
@@ -79,15 +87,13 @@ $node-height: 5rem;
 
 
 
-        &.drop-into   { background: lighten(navy, 30%);   }
-
-        &.drop-before { box-shadow: inset 0 4px 0 white;  }
-
-        &.drop-after  { box-shadow: inset 0 -4px 0 white; }
+        &.drop-into   { background: lighten($background, 30%);   }
+        &.drop-before { box-shadow: inset 0 4px 0 $foreground;  }
+        &.drop-after  { box-shadow: inset 0 -4px 0 $foreground; }
 
         &:hover {
-            background: blue;
-            color: white;
+            background: lighten($background, 15%);
+            color: $foreground;
         }
 
         &:before {
@@ -102,8 +108,8 @@ $node-height: 5rem;
     &.dragging-true .node {
         /*background: purple;*/
         &:hover {
-            background: teal;
-            box-shadow: inset 0 0 4px white;
+            background: $hover;
+            box-shadow: inset 0 0 4px $foreground;
         }
 
         a, button {
@@ -112,25 +118,25 @@ $node-height: 5rem;
     }
 
     .context-menu {
-        background: white;
-        color: navy;
+        background: $foreground;
+        color: $background;
         min-height: 4em;
-        border-left: navy 4px solid;
+        border-left: $background 4px solid;
         padding-left: 0.5em;
     }
 
     .expandable.expanded {
 
-        &.top-level { box-shadow: inset 0 -1px 0 white; }
+        &.top-level { box-shadow: inset 0 -1px 0 $foreground; }
         &:before { transform: rotate(90deg); }
 
     }
-    
+
 
     .expand-button {
         background: none;
         border: none;
-        color: white;
+        color: $foreground;
         margin: 0;
         padding: 0;
         margin-left: -1.5em;
@@ -195,13 +201,10 @@ $node-height: 5rem;
         padding: none;
         margin: none;
 
-        margin-right: -2px;
-        /*margin-top: -1px;*/ 
+        margin-right: -2px; 
         height: $node-height;
         z-index: 10;
-        /*max-height: $node-height;*/
         transition: all 0.3s ease-in-out;
-        /*transform: translateX(20px);*/
 
         &:focus {
             outline: none;
@@ -209,15 +212,11 @@ $node-height: 5rem;
         }
 
         &:hover {
-            background: white;
-            circle { fill: darkblue;}
+            background: $context-hover;
+            circle { fill: $background;}
         }
 
     }
-    /*
-    .node:hover .context-button {
-        transform: translateX(0);
-    }*/
 
     .context-button svg {
         
@@ -231,27 +230,25 @@ $node-height: 5rem;
     }
 
     .context-button circle {
-        fill: #ddd;
+        fill: $foreground;
     }
 
     .context-active .context-button {
 
-        background: white;
-        circle { fill: darkblue;}
+        background: $foreground;
+        circle { fill: $background;}
 
         &:hover {
             background: transparent;
-            circle { fill: #ddd;}
+            circle { fill: $foreground; }
         }
 
     }
     .search-result-highlight {
-        /*background: yellow;
-        color: navy;*/
-        box-shadow: 0 3px 0 0 deeppink;
+        box-shadow: 0 3px 0 0 $highlight;
     }
 
-    .node[draggable] {
+    .node[draggable=true] {
         cursor: move;
         cursor: -webkit-grab;
 
@@ -280,21 +277,13 @@ $node-height: 5rem;
 
         .node {
 
-            &.drop-into {
-                background: lighten(red, 30%);
-            }
+            &.drop-into { background: lighten($not-allowed, 30%); }
 
-            &.drop-before {
-                box-shadow: inset 0 4px 0 red;
-            }
+            &.drop-before { box-shadow: inset 0 4px 0 $not-allowed; }
 
-            &.drop-after {
-                box-shadow: inset 0 -4px 0 red;
-            }
+            &.drop-after { box-shadow: inset 0 -4px 0 $not-allowed; }
         }
-
     }
-
 }
 
 

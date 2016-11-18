@@ -482,7 +482,7 @@ class ReactLargeTree extends React.Component {
       return [dragChildNode, newParentNode, dropTargetNode]
   }
 
-  // render the whole shebang
+  // render the whole thing
   // ——————————————————————————————•——————————————————————————————
   render () {
 
@@ -644,8 +644,7 @@ class ReactLargeTree extends React.Component {
     // ——————————————————————————————•——————————————————————————————
     //  DRAGEND
     // ——————————————————————————————•——————————————————————————————
-    const dragend = (e) => {
-
+    const dragend = () => {
 
       dragOverCount = 0
 
@@ -655,7 +654,7 @@ class ReactLargeTree extends React.Component {
       this.updateFlatTree()
 
       this.setState({
-        dragging: false
+        dragging : false
       })
 
 
@@ -667,9 +666,7 @@ class ReactLargeTree extends React.Component {
 
     return (
       <div>
-        {this.state.dragging ? `currently dragging` : `not currently dragging`} <br />
-        {this.state.showContextMenuForNode ? `context menu node id: ${this.state.showContextMenuForNode}` : `no current context menu node`}<br />
-      <input onKeyUp={(e) => this.doSearch(e.target.value) } placeholder="Search 🔍"/>
+      <input className="tree-searcher" onKeyUp={(e) => this.doSearch(e.target.value) } placeholder="Search 🔍"/>
       <ol
         className   = {`react-large-tree dragging-${this.state.dragging} drag-allowed-${this.dragAllowed}`}
         onDrop      = {drop}

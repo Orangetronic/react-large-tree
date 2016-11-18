@@ -604,12 +604,14 @@ class ReactLargeTree extends React.Component {
         console.error(`shouldn't be able to drop here`)
       }
 
+      const oldParent = dragChildNode.__parent
+
       const newIndex = this.pruneAndReattach(dragChildNode, newParentNode[this.props.uniqueKey], this.currentDropLocation, this.currentDropTargetIdentifier)
 
       const moveDefinition = {
         childId : this.currentDragChildKey,
         into    : newParentNode[this.props.uniqueKey],
-        from    : dragChildNode.__parent,
+        from    : oldParent,
         atIndex : newIndex
       }
 

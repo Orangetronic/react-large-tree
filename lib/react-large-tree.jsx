@@ -36,8 +36,6 @@ class ReactLargeTree extends React.Component {
     // we store an internal copy of the branching tree, so we can latency compensate updates
     this.tree      = props.content   || {}
 
-    this.searchKey = props.searchKey || 'label'
-
     this.canDragChildInto = props.canDragChildInto ? props.canDragChildInto : () => true
 
     this.setCanDragChildInto(props)
@@ -61,7 +59,9 @@ class ReactLargeTree extends React.Component {
   }
 
   // ——————————————————————————————•——————————————————————————————
-  recursiveFilter (obj, searchTerm, searchKey = this.labelKey, expandedForSearchOverride) {
+  recursiveFilter (obj, searchTerm, expandedForSearchOverride) {
+
+    const searchKey = this.labelKey || 'label'
 
     const uniqueKey = this.props.uniqueKey
 
@@ -69,10 +69,16 @@ class ReactLargeTree extends React.Component {
 
     let expandedForSearch = []
 
+    console.log(searchKey)
+
     function filterChildren (node) {
       let newNode = Object.assign({}, node)
       let expanded = false;
-      if (!newNode[searchKey]) { return false }
+      if (!newNode[searchKey]) {
+        console.log(`node doesn't have searchkey`, newNode, newNode[searchKey])
+        return false
+
+      }
 
       if (newNode.children) {
 
@@ -87,7 +93,7 @@ class ReactLargeTree extends React.Component {
         expanded = true
       }
 
-      if (!newNode[searchKey] || newNode[searchKey].toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) {
+      if (!newNode[searchKey] || newNode[searchKey].toLowerCase().includes(searchTerm.toLowerCase())) {
         expanded = true
       }
 
@@ -101,7 +107,6 @@ class ReactLargeTree extends React.Component {
 
     if (!obj.children) {return obj}
     if (!searchTerm || searchTerm === '') { return obj }
-    if (!searchKey  || searchKey  === '') { return obj }
 
     const newobj = filterChildren(obj)
 
@@ -254,7 +259,7 @@ class ReactLargeTree extends React.Component {
 
     const searchKey = this.searchKey || this.labelKey
 
-    const tree = ignoreFilters ? this.recursiveFilter(this.tree, this.searchTerm, searchKey, this.expandedForSearch) : this.recursiveFilter(this.tree, this.searchTerm, searchKey)
+    const tree = ignoreFilters ? this.recursiveFilter(this.tree, this.searchTerm, this.expandedForSearch) : this.recursiveFilter(this.tree, this.searchTerm)
 
     this.flatTree = this.getFlatTree(tree, this.state.expandedItems, this.props.uniqueKey)
 

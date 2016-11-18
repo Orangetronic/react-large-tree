@@ -33,8 +33,10 @@ function generateBigTree (maxLevels = 6, targetCount = 17500) {
     // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
     const createChild = function (level = 1, hasChildrenProbability = 0.5) {
+
         let newChild = {
             label: makePhrase(),
+            text: makePhrase(),
             _id  : uuid()
         }
 
@@ -72,6 +74,7 @@ function generateBigTree (maxLevels = 6, targetCount = 17500) {
     let tree = {
         children: [],
         label: "Home",
+        text: 'yo',
         _id: "home" 
     }
 

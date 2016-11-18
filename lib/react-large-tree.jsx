@@ -22,7 +22,7 @@ class ReactLargeTree extends React.Component {
 
     this.dragAllowed = true
 
-    this[this.labelKey]Key    = props[this.labelKey]Key || 'label'
+    this.labelKey    = props.labelKey || 'label'
 
     this.state = {
       expandedItems : [],

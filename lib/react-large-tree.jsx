@@ -61,7 +61,7 @@ class ReactLargeTree extends React.Component {
   }
 
   // ——————————————————————————————•——————————————————————————————
-  recursiveFilter (obj, searchTerm, searchKey, expandedForSearchOverride) {
+  recursiveFilter (obj, searchTerm, searchKey = this.labelKey, expandedForSearchOverride) {
 
     const uniqueKey = this.props.uniqueKey
 

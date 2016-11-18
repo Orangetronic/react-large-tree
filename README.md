@@ -85,7 +85,8 @@ const content = {
 <ReactLargeTree
   content={content}
   canDragChildInto={(childNode, parentNode) => true || false }  
-  locked: false
+  locked= {false}
+  labelKey="label"
   uniqueKey= "_id"
   editingChild="myUniqueKey"
   handleRename= (nodeId, newName) => console.log(nodeId, newName)
@@ -96,6 +97,7 @@ const content = {
 1. `Content` is the tree object (required)
 2. `canDragChildInto` is a callback that receives the new parent and child nodes, so you can disallow some drag operations. If you don't supply a callback, all drag operations are allowed
 3. `locked` switches drag and drop off completely if `true`
+3. `labelKey` is the key for the property that should be used for the node's text content
 4. `uniqueKey` is the key for a property that should be unique for every node
 5. `editingChild` should be a value that matches a `child[uniqueKey]`. An input will be rendered in place of that node
 6. `handleRename` is a callback that will fire when the editingChild input blurs. I'd probably remove the `editingChild` prop when that happens if I were you

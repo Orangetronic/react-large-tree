@@ -22,6 +22,8 @@ class ReactLargeTree extends React.Component {
 
     this.dragAllowed = true
 
+    this[this.labelKey]Key    = props[this.labelKey]Key || 'label'
+
     this.state = {
       expandedItems : [],
       toBeHidden    : [],
@@ -395,12 +397,12 @@ class ReactLargeTree extends React.Component {
       data-type   = "expander"
     ><i>&rsaquo;</i></button>)
 
-    let label = node.label
+    let label = node[this.labelKey]
 
-    if (this.searchTerm && node.label.includes(this.searchTerm)) {
+    if (this.searchTerm && node[this.labelKey].includes(this.searchTerm)) {
 
       label = []
-      const labelFrags = node.label.split(this.searchTerm)
+      const labelFrags = node[this.labelKey].split(this.searchTerm)
       labelFrags.forEach( (frag, index) => {
         label.push(frag)
         if (index + 1 < labelFrags.length) {
@@ -442,7 +444,7 @@ class ReactLargeTree extends React.Component {
         <input
           type         = "text"
           placeholder  = {'please enter a name'}
-          defaultValue = {node.label}
+          defaultValue = {node[this.labelKey]}
           onBlur       = {(e) => this.props.handleRename(node[uniqueKey], e.target.value)}
         />
        </li>) :

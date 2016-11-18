@@ -7,9 +7,9 @@ $node-height: 5rem;
 
     background: navy;
     padding: 0;
-    
+
     color: white;
-    max-width: 350px;
+    max-width: 250px;
 
     overflow: hidden;
 
@@ -25,6 +25,10 @@ $node-height: 5rem;
         height: $node-height;
         line-height: $node-height;
         background: darken(navy, 10%);
+
+        transform: translate3d(0,0,0);
+
+        padding-right: 3em;
 
         a { color: white; }
 
@@ -66,23 +70,20 @@ $node-height: 5rem;
             }
         }
 
+        i.__user-icon {
+            margin-right: 0.5em;
+            opacity: 0.3;
+        }
+
         /*transition: height 0.2s ease-in-out;*/
 
-        &.target {
-            /*transition: box-shadow 0.2s ease-out;*/
-        }
 
-        &.drop-into {
-            background: lighten(navy, 30%);
-        }
-    
-        &.drop-before {
-            box-shadow: inset 0 4px 0 white;
-        }
 
-        &.drop-after {
-            box-shadow: inset 0 -4px 0 white;
-        }
+        &.drop-into   { background: lighten(navy, 30%);   }
+
+        &.drop-before { box-shadow: inset 0 4px 0 white;  }
+
+        &.drop-after  { box-shadow: inset 0 -4px 0 white; }
 
         &:hover {
             background: blue;
@@ -116,7 +117,6 @@ $node-height: 5rem;
         min-height: 4em;
         border-left: navy 4px solid;
         padding-left: 0.5em;
-
     }
 
     .expandable.expanded {
@@ -182,15 +182,23 @@ $node-height: 5rem;
         transition: opacity 300ms ease-in;
     }
 
+    position: absolute;
+
     .context-button {
-        float: right;
+
+        position: absolute;
+        top: 0;
+        right: 0;
+
         background: none;
         border: none;
         padding: none;
         margin: none;
-        /*margin-top: -1px;*/
+
         margin-right: -2px;
-        height: 100%;
+        /*margin-top: -1px;*/ 
+        height: $node-height;
+        z-index: 10;
         /*max-height: $node-height;*/
         transition: all 0.3s ease-in-out;
         /*transform: translateX(20px);*/
@@ -238,8 +246,9 @@ $node-height: 5rem;
 
     }
     .search-result-highlight {
-        background: yellow;
-        color: navy;
+        /*background: yellow;
+        color: navy;*/
+        box-shadow: 0 3px 0 0 deeppink;
     }
 
     .node[draggable] {

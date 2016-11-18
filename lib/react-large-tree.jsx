@@ -418,7 +418,7 @@ class ReactLargeTree extends React.Component {
 
     // id there is an iconClass, stick an icon at the beginning of the label
     if (node.iconClass) {
-      label = [(<i className={node.iconClass} ></i>)].concat(label)
+      label = [(<i className={`__user-icon ${node.iconClass}`} ></i>)].concat(label)
     }
 
     // if this is the root node, we can't drag it, otherwise, defer to whether or not the tree is locked
@@ -436,7 +436,7 @@ class ReactLargeTree extends React.Component {
 
       { node.href ? <a href={node.href}>{label}</a> : label }
 
-      { this.props.handleContextMenu && !this.state.dragging && !node.hideContextMenuButton ? contextButton : null }
+      { this.props.handleContextMenu && !node.hideContextMenuButton ? contextButton : null }
 
     </li>)
 

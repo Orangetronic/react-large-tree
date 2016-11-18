@@ -254,8 +254,6 @@ class ReactLargeTree extends React.Component {
   // ——————————————————————————————•——————————————————————————————
   updateFlatTree (ignoreFilters = false) {
 
-    const searchKey = this.searchKey || this.labelKey
-
     const tree = ignoreFilters ? this.recursiveFilter(this.tree, this.searchTerm, this.expandedForSearch) : this.recursiveFilter(this.tree, this.searchTerm)
 
     this.flatTree = this.getFlatTree(tree, this.state.expandedItems, this.props.uniqueKey)
@@ -449,6 +447,7 @@ class ReactLargeTree extends React.Component {
           type         = "text"
           placeholder  = {'please enter a name'}
           defaultValue = {node[this.labelKey]}
+          onKeyUp      = {(e) => {if (e.keyCode === 13) {this.props.handleRename(node[uniqueKey], e.target.value)}}}
           onBlur       = {(e) => this.props.handleRename(node[uniqueKey], e.target.value)}
         />
        </li>) :
@@ -624,9 +623,9 @@ class ReactLargeTree extends React.Component {
         this.props.childMoved(moveDefinition)
       } else {
         console.warn(`
-          moved ${moveDefinition.childId} 
+          moved ${moveDefinition.childId}
           from ${moveDefinition.from},
-          into ${moveDefinition.into} 
+          into ${moveDefinition.into}
           at index ${moveDefinition.atIndex},
           but you haven't passed in a 'childMoved' callback,
           so this event might not have any effect in your app
@@ -666,7 +665,11 @@ class ReactLargeTree extends React.Component {
 
     return (
       <div>
-      <input className="tree-searcher" onKeyUp={(e) => this.doSearch(e.target.value) } placeholder="Search 🔍"/>
+      <input
+        className="tree-searcher"
+        onKeyUp={(e) => this.doSearch(e.target.value) }
+        placeholder={this.props.searchPlaceholder || 'Search 🔍'}
+      />
       <ol
         className   = {`react-large-tree dragging-${this.state.dragging} drag-allowed-${this.dragAllowed}`}
         onDrop      = {drop}

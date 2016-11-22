@@ -67,7 +67,7 @@ class ReactLargeTree extends React.Component {
 
     this.expandedForSearch = [] // clear the current set of expanded for search items
 
-    let expandedForSearch = []
+    let expandedForSearch  = []
 
     function filterChildren (node) {
       let newNode = Object.assign({}, node)
@@ -341,7 +341,7 @@ class ReactLargeTree extends React.Component {
 
     const uniqueKey = this.props.uniqueKey
 
-    if (!node[uniqueKey]) {return [] }
+    if (!node[uniqueKey]) { return [] }
 
     const level = node.__level
 
@@ -606,6 +606,7 @@ class ReactLargeTree extends React.Component {
 
       if (!this.canDragChildInto(dragChildNode, newParentNode)) {
         console.error(`shouldn't be able to drop here`)
+        return
       }
 
       const oldParent = dragChildNode.__parent
@@ -660,7 +661,7 @@ class ReactLargeTree extends React.Component {
     }
 
 
-    const elements    = flatContent.map(child => this.getElementForChild(child))
+    const elements    = flatContent.filter(node => node[this.uniqueKey]).map(child => this.getElementForChild(child))
 
 
     return (

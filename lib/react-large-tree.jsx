@@ -532,15 +532,10 @@ class ReactLargeTree extends React.Component {
     }
 
 
-
-    let dragOverCount = 0
-
     // ——————————————————————————————•——————————————————————————————
     //  DRAGOVER
     // ——————————————————————————————•——————————————————————————————
     const dragover = (e) => {
-
-      dragOverCount++
 
       // DANGER — this event fires A LOT, be careful with it.
 
@@ -571,13 +566,14 @@ class ReactLargeTree extends React.Component {
         dropLocation = 'into'
       }
 
-      this.currentDropLocation = dropLocation
+      const [dragChildNode, newParentNode, dropTargetNode] = this.getChildParentTargetNodes()
 
-      const [dragChildNode, newParentNode] = this.getChildParentTargetNodes()
+      const isRoot = (dropTargetNode.__level === 0)
 
-      // TODO — are we allowed to drop here? or not?
-      //        consult a callback prop to decide!
-      if (this.canDragChildInto(dragChildNode, newParentNode)) {
+      this.currentDropLocation = !isRoot ? dropLocation : null
+
+
+      if (!isRoot && this.canDragChildInto(dragChildNode, newParentNode)) {
         e.dataTransfer.dropEffect = 'move'
         this.dragAllowed = true
         e.preventDefault()
@@ -613,13 +609,14 @@ class ReactLargeTree extends React.Component {
 
       const newIndex = this.pruneAndReattach(dragChildNode, newParentNode[this.props.uniqueKey], this.currentDropLocation, this.currentDropTargetIdentifier)
 
-      if (newIndex < 0) { return } // this is a special case that occurs if you try to move something *in front of* the root node
+
+
 
       const moveDefinition = {
         childId : this.currentDragChildKey,
         into    : newParentNode[this.props.uniqueKey],
         from    : oldParent,
-        atIndex : newIndex
+        atIndex : (newIndex >= 0) ? newIndex : 0
       }
 
 
@@ -649,8 +646,6 @@ class ReactLargeTree extends React.Component {
     // ——————————————————————————————•——————————————————————————————
     const dragend = () => {
 
-      dragOverCount = 0
-
       this.currentDragChildKey = null
       this.currentDropTargetIdentifier = null
       this.currentDropLocation = null
@@ -664,7 +659,7 @@ class ReactLargeTree extends React.Component {
     }
 
 
-    const elements    = flatContent.filter(node => node[this.uniqueKey]).map(child => this.getElementForChild(child))
+    const elements    = flatContent.filter(node => node[this.props.uniqueKey]).map(child => this.getElementForChild(child))
 
 
     return (

@@ -198,7 +198,7 @@ class ReactLargeTree extends React.Component {
 
     const toBeHidden = this.state.toBeHidden
 
-    let   flatTree   = []
+    let   flatTree   = new Map()
 
     expandedItems = expandedItems.concat(this.expandedForSearch)
 
@@ -210,7 +210,8 @@ class ReactLargeTree extends React.Component {
 
       const node = Object.assign(child, {__level: level, __willLeave: willLeave})
 
-      flatTree.push(node)
+      flatTree.set(node[uniqueKey], node)
+      // flatTree.push(node)
 
       if (!child.children) { return }
 
@@ -246,7 +247,7 @@ class ReactLargeTree extends React.Component {
 
     // console.log('got flat tree', +new Date())
 
-    return flatTree
+    return Array.from(flatTree.values())
 
   }
 

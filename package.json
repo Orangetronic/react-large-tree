@@ -9,7 +9,8 @@
     "build": "webpack -p",
     "rename-css-bower-dependencies": "find bower_components -name '*.css' | sed -e 'p;s/.css$/.scss/' | xargs -n2 mv",
     "start": "webpack-dev-server --inline --hot",
-    "postinstall": "bower install"
+    "postinstall": "bower install",
+    "preversion": "webpack -p"
   },
   "author": "",
   "license": "BSD",

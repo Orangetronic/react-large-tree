@@ -613,12 +613,15 @@ class ReactLargeTree extends React.Component {
 
       const newIndex = this.pruneAndReattach(dragChildNode, newParentNode[this.props.uniqueKey], this.currentDropLocation, this.currentDropTargetIdentifier)
 
+      if (newIndex < 0) { return } // this is a special case that occurs if you try to move something *in front of* the root node
+
       const moveDefinition = {
         childId : this.currentDragChildKey,
         into    : newParentNode[this.props.uniqueKey],
         from    : oldParent,
         atIndex : newIndex
       }
+
 
       if (this.props.childMoved) {
         this.props.childMoved(moveDefinition)

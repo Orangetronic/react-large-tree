@@ -360,7 +360,7 @@ class ReactLargeTree extends React.Component {
 
     const expandedItems = this.state.expandedItems.concat(this.expandedForSearch)
 
-    if (expandedItems.includes(node[uniqueKey]) && this.state.toBeHidden !== node[uniqueKey]) {
+    if (expandedItems.includes(node[uniqueKey]) && this.state.toBeHidden !== node[uniqueKey] && node.children && node.children.length) {
       classList.push('expanded')
     }
 
@@ -557,6 +557,8 @@ class ReactLargeTree extends React.Component {
       const mouseY     = e.clientY
       const clientRect = e.target.getBoundingClientRect()
 
+      const [dragChildNode, newParentNode, dropTargetNode] = this.getChildParentTargetNodes()
+
       let dropLocation
 
       if (mouseY < (clientRect.top + (clientRect.height / 3)) ) {
@@ -567,14 +569,15 @@ class ReactLargeTree extends React.Component {
         dropLocation = 'into'
       }
 
-      const [dragChildNode, newParentNode, dropTargetNode] = this.getChildParentTargetNodes()
 
       const isRoot = (dropTargetNode.__level === 0)
 
-      this.currentDropLocation = !isRoot ? dropLocation : null
+      // can't think of a single case where dropping something into itself would work…
+      const isSelf = (dragChildNode[this.props.uniqueKey] === newParentNode[this.props.uniqueKey]) 
 
+      this.currentDropLocation = !isRoot ? dropLocation : 'after'
 
-      if (!isRoot && this.canDragChildInto(dragChildNode, newParentNode)) {
+      if (!isSelf && this.canDragChildInto(dragChildNode, newParentNode)) {
 
         e.dataTransfer.dropEffect = 'move'
         this.dragAllowed = true
@@ -613,8 +616,6 @@ class ReactLargeTree extends React.Component {
       const oldParent = dragChildNode.__parent
 
       const newIndex = this.pruneAndReattach(dragChildNode, newParentNode[this.props.uniqueKey], this.currentDropLocation, this.currentDropTargetIdentifier)
-
-
 
 
       const moveDefinition = {

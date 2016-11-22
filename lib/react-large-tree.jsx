@@ -574,12 +574,16 @@ class ReactLargeTree extends React.Component {
 
 
       if (!isRoot && this.canDragChildInto(dragChildNode, newParentNode)) {
+
         e.dataTransfer.dropEffect = 'move'
         this.dragAllowed = true
         e.preventDefault()
+
       } else {
+
         e.dataTransfer.dropEffect = 'none'
         this.dragAllowed = false
+
       }
 
 
@@ -664,23 +668,23 @@ class ReactLargeTree extends React.Component {
 
     return (
       <div>
-      <input
-        className="tree-searcher"
-        onKeyUp={(e) => this.doSearch(e.target.value) }
-        placeholder={this.props.searchPlaceholder || 'Search 🔍'}
-      />
-      <ol
-        className   = {`react-large-tree dragging-${this.state.dragging} drag-allowed-${this.dragAllowed}`}
-        onDrop      = {drop}
-        onDragOver  = {dragover}
-        onDragStart = {dragstart}
-        onDragEnd   = {dragend}
-        onClick     = {handleClick}
-      >
+        <input
+          className="tree-searcher"
+          onKeyUp={(e) => this.doSearch(e.target.value) }
+          placeholder={this.props.searchPlaceholder || 'Search 🔍'}
+        />
+        <ol
+          className   = {`react-large-tree dragging-${this.state.dragging} drag-allowed-${this.dragAllowed}`}
+          onDrop      = {drop}
+          onDragOver  = {dragover}
+          onDragStart = {dragstart}
+          onDragEnd   = {dragend}
+          onClick     = {handleClick}
+        >
 
-        {elements.length ? elements : 'nothing to see here'}
+          {elements.length ? elements : 'nothing to see here'}
 
-      </ol>
+        </ol>
       </div>
     )
 

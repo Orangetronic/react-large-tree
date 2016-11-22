@@ -360,8 +360,15 @@ class ReactLargeTree extends React.Component {
 
     const expandedItems = this.state.expandedItems.concat(this.expandedForSearch)
 
-    if (expandedItems.includes(node[uniqueKey]) && this.state.toBeHidden !== node[uniqueKey] && node.children && node.children.length) {
+    if (
+      expandedItems.includes(node[uniqueKey])
+      && this.state.toBeHidden !== node[uniqueKey]
+      && node.children
+      && node.children.length
+    ) {
+
       classList.push('expanded')
+
     }
 
     if (level <= 1) { classList.push('top-level') } else {
@@ -561,6 +568,7 @@ class ReactLargeTree extends React.Component {
 
       let dropLocation
 
+
       if (mouseY < (clientRect.top + (clientRect.height / 3)) ) {
         dropLocation = 'before'
       } else if (mouseY > (clientRect.bottom - (clientRect.height / 3)) ) {
@@ -604,9 +612,14 @@ class ReactLargeTree extends React.Component {
 
       // TODO — this should never get called if the drop isn't viable
 
-      e.preventDefault()
 
       const [dragChildNode, newParentNode] = this.getChildParentTargetNodes()
+
+      if (dragChildNode[this.props.uniqueKey === newParentNode[this.props.uniqueKey]]) {
+        return
+      }
+
+      e.preventDefault()
 
       if (!this.canDragChildInto(dragChildNode, newParentNode)) {
         console.error(`shouldn't be able to drop here`)
@@ -616,7 +629,6 @@ class ReactLargeTree extends React.Component {
       const oldParent = dragChildNode.__parent
 
       const newIndex = this.pruneAndReattach(dragChildNode, newParentNode[this.props.uniqueKey], this.currentDropLocation, this.currentDropTargetIdentifier)
-
 
       const moveDefinition = {
         childId : this.currentDragChildKey,

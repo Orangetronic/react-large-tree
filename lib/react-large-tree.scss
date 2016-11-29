@@ -51,8 +51,6 @@ $max-width     : 330px;
             animation-fill-mode: forwards;
         }
         
-        &.highlight i { color: orange; }
-
         &.will-leave {
             transform: translate3d(0, 0, 0);
             animation: scoot-out;

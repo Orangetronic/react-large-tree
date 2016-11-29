@@ -389,7 +389,6 @@ class ReactLargeTree extends React.Component {
 
     if (this.props.nodesToHighlight && this.props.nodesToHighlight.includes(node[uniqueKey])) {
       classList.push('highlight')
-      console.log('found a highlighted one', node)
     }
 
     const contextButton = (<button

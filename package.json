@@ -3,6 +3,7 @@
   "version": "1.1.16",
   "description": "react large tree",
   "main": "react-large-tree.js",
+  "homepage": "https://github.com/Orangetronic/react-large-tree",
   "scripts": {
     "test": "eslint lib/",
     "watch-test": "./node_modules/karma/bin/karma start karma.conf.js --auto-watch --no-single-run",
@@ -11,8 +12,8 @@
     "start": "webpack-dev-server --inline --hot",
     "preversion": "webpack -p"
   },
-  "author": "",
-  "license": "BSD",
+  "author": "david@orangetronic.com",
+  "license": "MIT",
   "keywords": [
     "react",
     "reactjs",

@@ -89,8 +89,9 @@ const content = {
   labelKey="label"
   uniqueKey= "_id"
   editingChild="myUniqueKey"
-  handleRename= (nodeId, newName) => console.log(nodeId, newName)
-  handleContextMenu= (nodeId, position)  => console.log(nodeId, position),
+  handleRename= {(nodeId, newName) => console.log(nodeId, newName)}
+  handleContextMenu={ (nodeId, position)  => console.log(nodeId, position)}
+  nodesToHighlight={["uniqueValueForNode", "uniqueValueForAnotherNode"]}
 />
 ```
 
@@ -102,6 +103,7 @@ const content = {
 5. `editingChild` should be a value that matches a `child[uniqueKey]`. An input will be rendered in place of that node
 6. `handleRename` is a callback that will fire when the editingChild input blurs. I'd probably remove the `editingChild` prop when that happens if I were you
 7. `handleContextMenu` fires when somebody clicks the context button on a given node, so you can render a contextual menu, or perform some kind of action. A future release of this component will include a default set of contextual actions (cut, paste, delete, rename).
+8. `nodesToHighlight` is an array of unique values for nodes you want to apply a `.highlight` class to. Useful if you want to indicate a current resource, etc.
 
 
 

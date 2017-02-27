@@ -371,6 +371,7 @@ class ReactLargeTree extends React.Component {
 
     }
 
+
     if (level <= 1) { classList.push('top-level') } else {
       classList.push('sub-level')
     }
@@ -427,8 +428,10 @@ class ReactLargeTree extends React.Component {
     }
 
     // id there is an iconClass, stick an icon at the beginning of the label
+    const icon = (<i className={`__user-icon ${node.iconClass}`} ></i>)
+
     if (node.iconClass) {
-      label = [(<i className={`__user-icon ${node.iconClass}`} ></i>)].concat(label)
+      label = [icon].concat(label)
     }
 
     // if this is the root node, we can't drag it, otherwise, defer to whether or not the tree is locked
@@ -450,14 +453,17 @@ class ReactLargeTree extends React.Component {
 
     </li>)
 
+
     const renamer = this.props.editingChild === node[uniqueKey] ?
       (<li
         className = "node input-node"
         key       = {node[uniqueKey]}
        >
+        {node.iconClass ? icon : null}
         <input
           type         = "text"
           placeholder  = {'please enter a name'}
+          autoFocus
           defaultValue = {node[this.labelKey]}
           onKeyUp      = {(e) => {if (e.keyCode === 13) {this.props.handleRename(node[uniqueKey], e.target.value)}}}
           onBlur       = {(e) => this.props.handleRename(node[uniqueKey], e.target.value)}

@@ -37,7 +37,8 @@ function generateBigTree (maxLevels = 6, targetCount = 17500) {
         let newChild = {
             // label: makePhrase(),
             text: makePhrase(),
-            _id  : uuid()
+            _id  : uuid(),
+            iconClass: 'icon'
         }
 
         if (Math.random() > 0.6) {

@@ -1,10 +1,8 @@
 // import React from 'react';
 
-import react from 'react';
+import React from 'react';
 
 import './react-large-tree.scss';
-
-const React = react
 
 /*
 

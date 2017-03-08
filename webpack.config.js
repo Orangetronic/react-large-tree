@@ -9,7 +9,7 @@ module.exports = {
   output: {
     path: path.join(__dirname),
     filename: 'react-large-tree.js',
-    libraryTarget: 'umd',
+    libraryTarget: 'commonjs',
     library: 'ReactLargeTree'
   },
 

@@ -1,4 +1,9 @@
-import React from 'react';
+// import React from 'react';
+
+'use strict';
+
+import 'react';
+
 import './react-large-tree.scss';
 
 /*

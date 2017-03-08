@@ -42,7 +42,11 @@
     "webpack": "~1.11.0",
     "webpack-dev-server": "~1.10.1",
     "babel-runtime": "~5.8.20",
-    "react": "~15.3.2"
+    "react": "^0.14.8"
+  },
+  "peerDependencies": {
+    "babel-runtime": "~5.8.20",
+    "react": "^0.14.8"
   },
   "dependencies": {}
 }

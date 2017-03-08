@@ -47,5 +47,7 @@
   "peerDependencies": {
     "react": "^0.14.8"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react": "^0.14.8"
+  }
 }

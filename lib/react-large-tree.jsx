@@ -1,10 +1,10 @@
 // import React from 'react';
 
-'use strict';
-
-import 'react';
+import react from 'react';
 
 import './react-large-tree.scss';
+
+const React = react
 
 /*
 
@@ -22,6 +22,8 @@ class ReactLargeTree extends React.Component {
   // ——————————————————————————————•——————————————————————————————
   constructor (props) {
     super(props)
+
+    console.log('component instantiated')
 
     this.expandedForSearch = []
 

@@ -19,9 +19,10 @@ class ReactLargeTree extends React.Component {
 
   // ——————————————————————————————•——————————————————————————————
   constructor (props) {
+
     super(props)
 
-    console.log('component instantiated')
+    this.uniqueId = props.id || 'react-large-tree-' + Math.random() + '-' + Math.random() + '-' + Math.random()
 
     this.expandedForSearch = []
 
@@ -55,13 +56,82 @@ class ReactLargeTree extends React.Component {
   // ——————————————————————————————•——————————————————————————————
   componentWillReceiveProps (nextProps) {
 
+    // expand the path to the editing child
+    if (nextProps.editingChild) {
+
+
+      // use the most up-to-date tree
+      const tree        = nextProps.content || this.tree
+
+      // get an array of items in the path to the editing child
+      const pathToChild = this.getPathToChild(tree, nextProps.editingChild)
+
+      if (!pathToChild) {
+        console.warn(`Tried to expand the tree to reveal the editing child, but couldn't find it`)
+      } else {
+
+        // a little array merge using Set
+        const expandedSet = new Set(this.state.expandedItems)
+        pathToChild.forEach( segment => expandedSet.add(segment) )
+
+        this.state.expandedItems = Array.from(expandedSet)
+
+      }
+
+    }
+
+    // rebuild the flat tree using the latest content
     if (nextProps.content) {
       this.flatTree = this.getFlatTree(nextProps.content, this.state.expandedItems, nextProps.uniqueKey)
       this.tree     = nextProps.content
     }
 
+
     this.setCanDragChildInto(nextProps)
   }
+
+  // ——————————————————————————————•——————————————————————————————
+  getPathToChild (tree, childUnique) {
+
+    const uniqueKey   = this.props.uniqueKey
+
+    let   pathToChild = null
+    let   _iter = 0
+
+    function pathWalker (node, path = []) {
+      _iter++
+      if (pathToChild) {
+
+        return // we have won already
+
+      } else {
+
+        if (node[uniqueKey] === childUnique) {
+
+          pathToChild = path
+          return
+
+        } else {
+
+          const newPath = [].concat(path).concat([node[uniqueKey]])
+
+          if (node.children && node.children.length) {
+            node.children.forEach( (child) => { pathWalker(child, newPath) } )
+          }
+
+        }
+
+      }
+
+
+    }
+
+    pathWalker(tree)
+
+    return pathToChild
+
+  }
+
 
   // ——————————————————————————————•——————————————————————————————
   recursiveFilter (obj, searchTerm, expandedForSearchOverride) {
@@ -120,10 +190,16 @@ class ReactLargeTree extends React.Component {
   // ——————————————————————————————•——————————————————————————————
   shouldComponentUpdate (nextProps, nextState) {
 
-    if (nextProps.hasOwnProperty('content'))             { return true }
-    if (nextState.hasOwnProperty('dragging'))            { return true }
-    if (nextState.hasOwnProperty('toBeHidden'))          { return true }
-    if (nextState.hasOwnProperty('expandedItems'))       { return true }
+    if (
+
+      nextProps.hasOwnProperty('editingChild')  ||
+      nextProps.hasOwnProperty('content')       ||
+
+      nextState.hasOwnProperty('dragging')      ||
+      nextState.hasOwnProperty('toBeHidden')    ||
+      nextState.hasOwnProperty('expandedItems')
+
+    ) { return true }
 
   }
 
@@ -137,26 +213,18 @@ class ReactLargeTree extends React.Component {
 
     if (open) {
 
-      // console.log('its open', uniqueValue)
-
       expandedItems = this.state.expandedItems.filter(item => item !== uniqueValue)
 
-      // console.log(this.state.expandedItems.length, expandedItems.length)
-
-      // if we're closing a node, make sure it's not in the expanded for search list!
       expandedSearchItems = this.expandedForSearch.filter(item => item !== uniqueValue)
-
-      // console.log(this.expandedForSearch.length, expandedSearchItems.length)
 
     } else {
 
-      // console.log('time to open a child set', +new Date())
       expandedItems = this.state.expandedItems.concat([uniqueValue])
 
     }
 
     if (expandedSearchItems !== null) {
-      // console.log('resetting expanded search items')
+
       this.expandedForSearch = expandedSearchItems
     }
 
@@ -199,8 +267,6 @@ class ReactLargeTree extends React.Component {
   // ——————————————————————————————•——————————————————————————————
   getFlatTree (tree, expandedItems, uniqueKey) {
 
-    // console.log('getting flat tree', +new Date())
-
     const toBeHidden = this.state.toBeHidden
 
     let   flatTree   = new Map()
@@ -209,25 +275,28 @@ class ReactLargeTree extends React.Component {
 
     const currentDragChildKey = this.currentDragChildKey
 
+    // take a tree node and decide whether to push it to the flatTree
+    // if it is expanded, send it's children to also be pushed to the tree
     function pushChildToFlatTree (child, level = 0, willLeave = false) {
-
-      // const childElement = getElementForChild(child, level)
 
       const node = Object.assign(child, {__level: level, __willLeave: willLeave})
 
       flatTree.set(node[uniqueKey], node)
-      // flatTree.push(node)
 
       if (!child.children) { return }
 
       const expanded = (expandedItems.includes(child[uniqueKey]))
 
-      if ( level === 0 || expanded && node[uniqueKey] !== currentDragChildKey ) {
+      if (
+        level === 0 ||
+        expanded && node[uniqueKey] !== currentDragChildKey
+      ) {
         pushChildrenToFlatTree(child, level + 1, willLeave)
       }
 
     }
 
+    // loop through a children array and push each to the flatTree
     function pushChildrenToFlatTree (parent, level, willLeave = false) {
 
       if (parent[uniqueKey] === toBeHidden) {
@@ -248,11 +317,10 @@ class ReactLargeTree extends React.Component {
 
     }
 
+    // kick it all off
     pushChildToFlatTree(tree)
 
-    // console.log('got flat tree', +new Date())
-
-    return Array.from(flatTree.values())
+    return flatTree.size ? Array.from(flatTree.values()) : []
 
   }
 
@@ -398,6 +466,7 @@ class ReactLargeTree extends React.Component {
     }
 
     const contextButton = (<button
+        key      ={node[uniqueKey] + '-context-button'}
         className="context-button"
         data-unique={node[uniqueKey]}
         data-type="context-menu-trigger"
@@ -412,6 +481,7 @@ class ReactLargeTree extends React.Component {
       </button>)
 
     const expandButton = (<button
+      key         = {node[uniqueKey] + '-expand-button'}
       className   = "expand-button"
       data-unique = {node[uniqueKey]}
       data-type   = "expander"
@@ -426,7 +496,7 @@ class ReactLargeTree extends React.Component {
       labelFrags.forEach( (frag, index) => {
         label.push(frag)
         if (index + 1 < labelFrags.length) {
-          label.push((<span key={index} className="search-result-highlight">{this.searchTerm}</span>))
+          label.push((<span key={node[uniqueKey] + '-frag-' + index} className="search-result-highlight">{this.searchTerm}</span>))
         }
       })
 
@@ -466,6 +536,7 @@ class ReactLargeTree extends React.Component {
        >
         {node.iconClass ? icon : null}
         <input
+          key          = {node[uniqueKey] + 'input'}
           type         = "text"
           placeholder  = {'please enter a name'}
           autoFocus
@@ -512,11 +583,14 @@ class ReactLargeTree extends React.Component {
 
     if (!contentTree) {
       console.warn('react large tree expected a \'content\' prop')
-      return ''
+      return null
     }
 
 
     const flatContent = this.flatTree
+
+    if (!flatContent || !flatContent.length) { return null }
+
 
     // ——————————————————————————————•——————————————————————————————
     //  CLICKS
@@ -596,7 +670,7 @@ class ReactLargeTree extends React.Component {
       const isRoot = (dropTargetNode.__level === 0)
 
       // can't think of a single case where dropping something into itself would work…
-      const isSelf = (dragChildNode[this.props.uniqueKey] === newParentNode[this.props.uniqueKey]) 
+      const isSelf = (dragChildNode[this.props.uniqueKey] === newParentNode[this.props.uniqueKey])
 
       this.currentDropLocation = !isRoot ? dropLocation : 'after'
 
@@ -688,34 +762,39 @@ class ReactLargeTree extends React.Component {
         dragging : false
       })
 
-
     }
 
 
-    const elements    = flatContent.filter(node => node[this.props.uniqueKey]).map(child => this.getElementForChild(child))
+    const elements  = flatContent.length ? flatContent.filter(node => node[this.props.uniqueKey]).map(child => this.getElementForChild(child)) : null
 
+    const list = elements && elements.length ? (
+      <ol
+        key={this.uniqueId + '-main-list'}
+        className   = {`react-large-tree dragging-${this.state.dragging} drag-allowed-${this.dragAllowed}`}
+        onDrop      = {drop}
+        onDragOver  = {dragover}
+        onDragStart = {dragstart}
+        onDragEnd   = {dragend}
+        onClick     = {handleClick}
+      >
+        {elements}
+      </ol>
+    ) : <span key={this.uniqueId + '-empty-results-message'}>No Items Present</span>
 
-    return (
-      <div>
+    const result = (<div id={this.uniqueId} key={'react-large-tree-' + this.uniqueId}>
         <input
           className="tree-searcher"
           onKeyUp={(e) => this.doSearch(e.target.value) }
           placeholder={this.props.searchPlaceholder || 'Search 🔍'}
+          key={this.uniqueId + '-search-input'}
         />
-        <ol
-          className   = {`react-large-tree dragging-${this.state.dragging} drag-allowed-${this.dragAllowed}`}
-          onDrop      = {drop}
-          onDragOver  = {dragover}
-          onDragStart = {dragstart}
-          onDragEnd   = {dragend}
-          onClick     = {handleClick}
-        >
 
-          {elements.length ? elements : 'nothing to see here'}
+        {list}
 
-        </ol>
-      </div>
-    )
+    </div>)
+
+    return result
+
 
   }
 

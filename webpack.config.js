@@ -3,45 +3,45 @@ var path = require('path');
 
 
 module.exports = {
-  context: path.join(__dirname),
-  entry: './lib/index.js',
+  // context : path.join(__dirname),
+  entry : './lib/index.js',
 
-  output: {
-    path: path.join(__dirname),
-    filename: 'react-large-tree.js',
-    libraryTarget: 'commonjs',
-    library: 'ReactLargeTree'
+  output : {
+    path : path.join(__dirname),
+    filename : 'react-large-tree.js',
+    libraryTarget : 'commonjs',
+    library : 'ReactLargeTree'
   },
 
-  externals: {
-   'react': 'var React',
-   'react/addons': 'var React'
+  externals : {
+   'react' : 'var React',
+   'react/addons' : 'var React'
   },
 
-  module: {
-    loaders: [
+  module : {
+    loaders : [
       {
-        test: /\.scss$/,
+        test : /\.scss$/,
         // Query parameters are passed to node-sass
-        loader: 'style!css!sass?outputStyle=expanded&' +
+        loader : 'style!css!sass?outputStyle=expanded&' +
           'includePaths[]=' + (path.resolve(__dirname, './bower_components')) + '&' +
           'includePaths[]=' + (path.resolve(__dirname, './node_modules'))
       },
       {
-        test: /\.css$/,
-        loaders: [
+        test : /\.css$/,
+        loaders : [
           'style-loader',
           'css-loader?importLoaders=1',
           'postcss-loader'
         ]
       },
       {
-        test: /(\.js)|(\.jsx)$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          optional: ['runtime'],
-          stage: 0
+        test : /(\.js)|(\.jsx)$/,
+        exclude : /node_modules/,
+        loader : 'babel-loader',
+        query : {
+          optional : ['runtime'],
+          stage : 0
         }
       }
     ]

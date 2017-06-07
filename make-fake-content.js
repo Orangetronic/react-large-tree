@@ -26,6 +26,8 @@ function makePhrase () {
     return phrase
 }
 
+var randomChildId = null
+
 function generateBigTree (maxLevels = 6, targetCount = 17500) {
 
     let childCount  = 0
@@ -43,6 +45,11 @@ function generateBigTree (maxLevels = 6, targetCount = 17500) {
 
         if (Math.random() > 0.6) {
             newChild.href = `#${makePhrase()}`
+        }
+
+        if (Math.random() < 0.1) {
+            console.log('randomChildId', newChild._id)
+            randomChildId = newChild._id
         }
 
         // maybeAddChildren…

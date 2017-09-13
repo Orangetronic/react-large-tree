@@ -501,12 +501,11 @@ class ReactLargeTree extends React.Component {
       })
 
     }
-
-    // id there is an iconClass, stick an icon at the beginning of the label
-    const icon = (<i className={`__user-icon ${node.iconClass}`} ></i>)
-
+    
     if (node.iconClass) {
-      label = [icon].concat(label)
+      // id there is an iconClass, stick an icon at the beginning of the label
+      const icon = (<i className={`__user-icon ${node.iconClass}`} key={`${node[uniqueKey]}-user-icon`}></i>)
+      label = [icon].concat(<span key={`${node[uniqueKey]}-label`}>label</span>)
     }
 
     // if this is the root node, we can't drag it, otherwise, defer to whether or not the tree is locked

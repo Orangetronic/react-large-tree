@@ -502,9 +502,10 @@ class ReactLargeTree extends React.Component {
 
     }
     
+    let icon = null
     if (node.iconClass) {
       // id there is an iconClass, stick an icon at the beginning of the label
-      const icon = (<i className={`__user-icon ${node.iconClass}`} key={`${node[uniqueKey]}-user-icon`}></i>)
+      icon = (<i className={`__user-icon ${node.iconClass}`} key={`${node[uniqueKey]}-user-icon`}></i>)
       label = [icon].concat(<span key={`${node[uniqueKey]}-label`}>{label}</span>)
     }
 
@@ -533,7 +534,7 @@ class ReactLargeTree extends React.Component {
         className = "node input-node"
         key       = {node[uniqueKey]}
        >
-        {node.iconClass ? icon : null}
+        {icon}
         <input
           key          = {node[uniqueKey] + 'input'}
           type         = "text"

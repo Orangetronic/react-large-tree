@@ -501,7 +501,7 @@ class ReactLargeTree extends React.Component {
       })
 
     }
-    
+
     let icon = null
     if (node.iconClass) {
       // id there is an iconClass, stick an icon at the beginning of the label
@@ -779,7 +779,7 @@ class ReactLargeTree extends React.Component {
       >
         {elements}
       </ol>
-    ) : <span key={this.uniqueId + '-empty-results-message'}>No Items Present</span>
+    ) : <span className="no-items" key={this.uniqueId + '-empty-results-message'}>No Items Present</span>
 
     const result = (<div id={this.uniqueId} key={'react-large-tree-' + this.uniqueId}>
         <input

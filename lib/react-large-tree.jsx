@@ -33,7 +33,8 @@ class ReactLargeTree extends React.Component {
     this.state = {
       expandedItems : [],
       toBeHidden    : [],
-      dragging      : false
+      dragging      : false,
+      showContextMenuForNode: null
     }
 
     // we store an internal flat tree, so we don't have to do any tree recursion change various state
@@ -457,8 +458,9 @@ class ReactLargeTree extends React.Component {
       classList.push( `target drop-${this.currentDropLocation}`)
     }
 
-    if (this.state.showContextMenuForNode === node[uniqueKey]) {
+    if (this.props.activeContextMenuNode === node[uniqueKey]) {
       classList.push('context-active')
+
     }
 
     if (this.props.nodesToHighlight && this.props.nodesToHighlight.includes(node[uniqueKey])) {

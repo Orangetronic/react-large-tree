@@ -459,7 +459,6 @@ class ReactLargeTree extends React.Component {
 
     if (this.props.activeContextMenuNode === node[uniqueKey]) {
       classList.push('context-active')
-
     }
 
     if (this.props.nodesToHighlight && this.props.nodesToHighlight.includes(node[uniqueKey])) {

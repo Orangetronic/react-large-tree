@@ -33,7 +33,7 @@ class ReactLargeTree extends React.Component {
     this.state = {
       expandedItems : [],
       toBeHidden    : [],
-      dragging      : false,
+      dragging      : false
     }
 
     // we store an internal flat tree, so we don't have to do any tree recursion change various state

@@ -34,7 +34,6 @@ class ReactLargeTree extends React.Component {
       expandedItems : [],
       toBeHidden    : [],
       dragging      : false,
-      showContextMenuForNode: null
     }
 
     // we store an internal flat tree, so we don't have to do any tree recursion change various state

@@ -457,7 +457,7 @@ class ReactLargeTree extends React.Component {
       classList.push( `target drop-${this.currentDropLocation}`)
     }
 
-    if (this.state.showContextMenuForNode === node[uniqueKey]) {
+    if (this.props.activeContextMenuNode === node[uniqueKey]) {
       classList.push('context-active')
     }
 
